@@ -1,0 +1,7 @@
+*.ova
+*.vdi
+*.log
+*.pcap
+.env
+secrets/*
+.DS_Store
