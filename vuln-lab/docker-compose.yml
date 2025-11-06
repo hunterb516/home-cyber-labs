@@ -1,0 +1,16 @@
+services:
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    restart: unless-stopped
+    ports:
+      - "3000:3000"   # keeps the original app reachable for reference/baseline
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: juice-nginx
+    depends_on:
+      - juice-shop
+    ports:
+      - "8081:80"     # scan this port for AFTER results
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
