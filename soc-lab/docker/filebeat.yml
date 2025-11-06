@@ -1,0 +1,41 @@
+filebeat.inputs:
+  - type: filestream
+    id: nginx-access
+    enabled: true
+    paths:
+      - /var/log/nginx/access.log
+
+processors:
+  # Parse Nginx Combined Log Format:
+  # 192.168.65.1 - - [06/Nov/2025:00:55:56 +0000] "GET /test HTTP/1.1" 404 153 "-" "curl/8.7.1"
+  - dissect:
+      field: message
+      ignore_failure: true
+      tokenizer: >-
+        %{client.ip} %{nginx.access.remote_user_ident:-} %{nginx.access.remote_user:-}
+        [%{nginx.access.time}]
+        "%{http.request.method} %{url.path} %{http.version}"
+        %{http.response.status_code} %{http.response.body.bytes}
+        "%{http.request.referrer}" "%{user_agent.original}"
+  - convert:
+      ignore_failure: true
+      fields:
+        - {from: http.response.status_code, to: http.response.status_code, type: long}
+        - {from: http.response.body.bytes, to: http.response.body.bytes, type: long}
+  - rename:
+      ignore_missing: true
+      fields:
+        - from: nginx.access.time
+          to: event.original_time               # keep the raw bracketed time
+  - add_fields:
+      target: event
+      fields:
+        dataset: nginx.access
+        module: nginx
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  # keep defaults (data streams under filebeat-*)
+
+setup.kibana:
+  host: "kibana:5601"
