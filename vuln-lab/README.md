@@ -16,7 +16,7 @@ Using Tenable Nessus Essentials, I performed a vulnerability scan against a cont
          ▲                                   │
          └────── Remediation applied ────────┘
 ---
-
+```
 ## Lab Objectives
 - Goal	                                            Status
 - Deploy intentionally vulnerable app (Juice Shop)	  ✅
