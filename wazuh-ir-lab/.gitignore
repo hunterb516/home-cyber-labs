@@ -1,0 +1,6 @@
+# containers & local artifacts
+*.log
+*.ndjson
+*.pcap
+tmp/
+.env

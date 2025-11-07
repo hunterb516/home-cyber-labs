@@ -1,0 +1,95 @@
+version: '3.8'
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - wazuh-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.3
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_NAME=kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - wazuh-net
+
+  wazuh:
+    image: wazuh/wazuh-manager:4.14.0
+    hostname: wazuh
+    ports:
+      - "1514:1514/udp"   # (optional) syslog
+      - "1515:1515"       # manager comms
+      - "55000:55000"     # agent registration/API
+    depends_on:
+      - elasticsearch
+    volumes:
+      - wazuh-alerts:/var/ossec/logs/alerts
+    networks:
+      - wazuh-net
+
+  wazuh-agent:
+    image: wazuh/wazuh-agent:4.14.0
+    container_name: wazuh-agent
+    environment:
+      - MANAGER_ADDRESS=wazuh
+    # Let the agent read the SSH target's /var/log/auth.log via bind mount
+    volumes:
+      - ./ssh-logs:/var/log
+    depends_on:
+      - wazuh
+    networks:
+      - wazuh-net
+
+  # Ships Wazuh manager alerts.json into Elasticsearch so they appear in Kibana
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.3
+    container_name: wazuh-filebeat
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - wazuh-alerts:/var/ossec/logs/alerts:ro        # from wazuh manager
+    depends_on:
+      - wazuh
+      - elasticsearch
+    networks:
+      - wazuh-net
+
+  ssh-target:
+    image: rastasheep/ubuntu-sshd:18.04
+    container_name: ssh-target
+    # NOTE: this image may not create the user; we’ll add it with docker exec below
+    ports:
+      - "2222:22"
+    volumes:
+      - ./ssh-logs:/var/log     # persist /var/log/auth.log for the agent to read
+    networks:
+      - wazuh-net
+
+# Share Wazuh alerts with Filebeat
+volumes:
+  esdata:
+  wazuh-alerts:
+  # We still define ssh-logs for clarity, but it's a bind mount (absolute path on host)
+  # created by the volumes section under ssh-target (above) using './ssh-logs'
+  # Docker will create the folder if missing.
+
+networks:
+  wazuh-net:
+    driver: bridge
