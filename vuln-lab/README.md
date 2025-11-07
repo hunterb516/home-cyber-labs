@@ -46,7 +46,7 @@ Using Tenable Nessus Essentials, I performed a vulnerability scan against a cont
 
 
 ## Screenshot — BEFORE scan
-(evidence/before-dashboard.png)
+!(evidence/before-dashboard.png)
 
 ## Remediation Applied (Security Header Fix)
 
@@ -70,7 +70,7 @@ Result:
 
 
 ## Screenshot — AFTER scan
-(evidence/after-dashboard.png)
+!(evidence/after-dashboard.png)
 
 ## Nessus report files stored in ./evidence/:
 
@@ -101,7 +101,7 @@ vuln-lab/
 │   └── nessus-after.html
 ├── docker-compose.yml
 └── README.md  
-
+```
 ## What I learned
 
 - How to conduct vulnerability scanning like a SOC/Vuln Analyst
