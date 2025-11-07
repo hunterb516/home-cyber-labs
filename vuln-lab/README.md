@@ -77,12 +77,12 @@ nessus-before.html
 nessus-after.html
 
 ## Outcome / Takeaways
-```text```
+```
 Metric	                       Before	      After
 Number of findings	             10	            3
 Risk level	                Medium/Info	    Info only
 Security headers missing	     ❌	           ✅
-
+```
 Skills demonstrated:
 - Vulnerability scanning (Tenable Nessus)
 - Filtering and interpreting CVSS / plugin data
