@@ -46,7 +46,7 @@ Using Tenable Nessus Essentials, I performed a vulnerability scan against a cont
 
 
 ## Screenshot — BEFORE scan
-![Kibana Dashboard](before-dashboard.png)
+![Kibana Dashboard](evidence/before-dashboard.png)
 
 ## Remediation Applied (Security Header Fix)
 
@@ -70,7 +70,7 @@ Result:
 
 
 ## Screenshot — AFTER scan
-![Kibana Dashboard](after-dashboard.png)
+![Kibana Dashboard](evidence/after-dashboard.png)
 ## Nessus report files stored in ./evidence/:
 
 nessus-before.html
