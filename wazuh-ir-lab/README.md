@@ -3,7 +3,7 @@
 
 ---
 
-### What this lab shows recruiters
+### What This Lab Shows 
 - End-to-end SOC workflow: **generate attack → detect → investigate → visualize**
 - Ability to **instrument** Docker services, forward alerts, and **build dashboards**
 - Incident-response habits: **tagging evidence**, keeping a clean **README** + screenshots
@@ -66,6 +66,17 @@ You should see Wazuh alerts (auth failures / brute-force rule hits).
 ![Kibana Discover](evidence/discover-bruteforce.png)
 ![Kibana Spike](evidence/spike-bruteforce.png)
 
+## What I Learned
+
+- How to build a full Incident Detection pipeline using **Wazuh + Elasticsearch + Kibana**
+- How Filebeat ships logs into a SIEM pipeline and how Wazuh parses them into alerts
+- How to simulate an SSH brute-force attack and observe the resulting log/event spike
+- How to hunt for security events in Kibana using filters and KQL queries
+    - (`project.lab: "wazuh-ir-bruteforce"`)
+- How to build dashboards and visualizations showing attack activity over time
+- How a SOC analyst moves through the IR workflow:
+    - **Detect → Investigate → Visualize → Report**
+- Learned the value of log centralization and alerting during incident response
 
 # Why this matters
 - Proves competency with SIEM data pipelines, alert triage, and dashboards
