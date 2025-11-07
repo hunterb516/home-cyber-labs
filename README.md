@@ -1,4 +1,4 @@
-###Home Cyber Labs — Security Operations, Vulnerability Management, Detection Engineering
+### Home Cyber Labs — Security Operations, Vulnerability Management, Detection Engineering
 **Welcome to my Home Cyber Labs portfolio — a collection of hands-on cybersecurity projects demonstrating real defensive security skills:**
 - Log ingestion & SIEM use
 - Vulnerability scanning & remediation
